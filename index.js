@@ -1,0 +1,8 @@
+var wsHook={};!function(){function t(t){this.bubbles=t.bubbles||!1,this.cancelBubble=t.cancelBubble||!1,this.cancelable=t.cancelable||!1,this.currentTarget=t.currentTarget||null,this.data=t.data||null,this.defaultPrevented=t.defaultPrevented||!1,this.eventPhase=t.eventPhase||0,this.lastEventId=t.lastEventId||"",this.origin=t.origin||"",this.path=t.path||[],this.ports=t.parts||[],this.returnValue=t.returnValue||!0,this.source=t.source||null,this.srcElement=t.srcElement||null,this.target=t.target||null,this.timeStamp=t.timeStamp||null,this.type=t.type||"message",this.__proto__=t.__proto__||MessageEvent.__proto__}var e=wsHook.before=function(t,e,n){return t},n=wsHook.after=function(t,e,n){return t},s=wsHook.modifyUrl=function(t){return t};wsHook.resetHooks=function(){wsHook.before=e,wsHook.after=n,wsHook.modifyUrl=s};var r=WebSocket;WebSocket=function(e,n){e=wsHook.modifyUrl(e)||e,this.url=e,this.protocols=n;var s,o=(s=this.protocols?new r(e,n):new r(e)).send;return s.send=function(t){arguments[0]=wsHook.before(t,s.url,s)||t,o.apply(this,arguments)},s._addEventListener=s.addEventListener,s.addEventListener=function(){var e,n=this;return"message"===arguments[0]&&(arguments[1]=(e=arguments[1],function r(){arguments[0]=wsHook.after(new t(arguments[0]),s.url,s),null!==arguments[0]&&e.apply(n,arguments)})),s._addEventListener.apply(this,arguments)},Object.defineProperty(s,"onmessage",{set:function(){var e=this,n=arguments[0],r=function(){arguments[0]=wsHook.after(new t(arguments[0]),s.url,s),null!==arguments[0]&&n.apply(e,arguments)};s._addEventListener.apply(this,["message",r,!1])}}),s}}();
+let history = []
+wsHook.before = function(data, url, o) {
+  o.send(data)
+}
+
+
+
